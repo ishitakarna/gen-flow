@@ -25,4 +25,4 @@
 
 ## Project Summary
 
-This is a summary of the project!
+Every business needs workflow management, monitoring and reporting. A workflow can be defined as a defined list of processes. It is a challenge for businesses of all sizes, but small businesses in particular who lack a dedicated team to oversee departmental communications or maintain a record of internal business procedures often struggle. They rely on either manual communication or a third-party softwares that must be tailored to their use case, which may be expensive. A user without technical understanding is unable to alter the program because customization is often handled by the application developers. We propose a solution that targets to solve all the above mentioned problems: “Generic Workflow Management, Monitoring and Reporting Application”.
