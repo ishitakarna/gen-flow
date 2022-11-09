@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import Login from "./components/Login/Login";
+import ProcessOwnerView from './components/ProcessOwnerView/ProcessOwnerView';
 
 function App() {
     const [token, setToken] = useState();
@@ -10,9 +11,7 @@ function App() {
     }
     return (
         <div className="App">
-            <header className="App-header">
-
-            </header>
+            <ProcessOwnerView/>
         </div>
     );
 }

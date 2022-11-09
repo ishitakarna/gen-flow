@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: auto;
+    margin-top: 30px;
+}
+
+.search-box input {
+    width: 1000px;
+}
+
+.table-view {
+    margin-top: 10px;
+}
