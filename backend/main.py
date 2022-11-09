@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.requests import Request
 from fastapi.responses import JSONResponse
-from .routers import test_router
+from routers import test_router
 
 app = FastAPI()
 
