@@ -1,13 +1,20 @@
 import './App.css';
+import React, { useState } from 'react';
+import Login from "./components/Login/Login";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
+    const [token, setToken] = useState();
 
-      </header>
-    </div>
-  );
+    if(!token) {
+        return <Login setToken={setToken} />
+    }
+    return (
+        <div className="App">
+            <header className="App-header">
+
+            </header>
+        </div>
+    );
 }
 
 export default App;
