@@ -6,6 +6,7 @@ import "./TableView.css"
 import ModalView from '../../ModalView/ModalView.js'
 import DetailModal from "./DetailModal/DetailModal";
 import CompleteModal from "./CompleteModal/CompleteModal";
+import Api from "../../../api";
 
 function TableView() {
     const [workflowInstances, setWorkflowInstances] = useState([]);
@@ -18,6 +19,31 @@ function TableView() {
     }, []);
 
     function getAllWorkflowInstances() {
+        const api = new Api();
+        const wfData = []
+        api.getWorkflowsForP(2)
+            .then(result => {
+                let workflows = result.data;
+                console.log(workflows)
+                Object.keys(workflows).forEach(function(key){
+                    let wf = {}
+                    let len = workflows[key].length
+                    let temp = workflows[key][len - 1]
+                    let val = Object.values(temp)[0][0]
+                    console.log(val)
+                    // wf.wfInstanceId = val.wfInstanceId
+                    // wf.name = val.wfName
+                    // wf.dateC = val.wfcreatedDT
+                    // wf.dateU = val.wfupdatedDT
+                    // wf.curP = val.processId
+                    // wf.dept = val.deptId
+                    // wf.businessId = val.businessId
+                    // wfData.push(wf)
+                })
+                // console.log(wfData);
+                // setWorkflowInstances(wfData);
+                // setLoading(false);
+            })
        const test = [
         {
             wfId: "red",
@@ -64,7 +90,7 @@ function TableView() {
             <Table striped bordered hover>
             <thead>
                 <tr>
-                <th>Workflow ID</th>
+                <th>Workflow Instance ID</th>
                 <th>Date updated</th>
                 <th>Details</th>
                 <th>Status</th>

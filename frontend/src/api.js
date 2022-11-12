@@ -36,4 +36,8 @@ export default class Api {
     deleteWorkflowInstance = (workflow) => {
         return this.init().delete(`/workflows/instances/delete/${workflow.wfInstanceId}/${workflow.businessId}`);
     }
+
+    getWorkflowsForP = (userId) => {
+        return this.init().get(`/workflows/instances/po/${userId}`);
+    }
 }
