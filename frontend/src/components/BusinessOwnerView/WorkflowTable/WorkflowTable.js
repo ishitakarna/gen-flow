@@ -11,6 +11,7 @@ function WorkflowTable() {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [deleteModalShow, setDeleteModalShow] = useState(false);
+    const [selectedRow, setSelectedRow] = useState({});
 
     useEffect(() => {
         getAllWorkflowInstances();
@@ -21,83 +22,30 @@ function WorkflowTable() {
         const wfData = []
         api.getIncompleteWorkFlowsForBO(1)
             .then(result => {
-                let workflows = result.data
-                console.log(workflows);
+                let workflows = result.data;
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
                     let len = workflows[key].length
-                    let val = workflows[key][len - 1]
-                    console.log(val)
+                    let temp = workflows[key][len - 1]
+                    let val = Object.values(temp)[0][0]
                     wf.wfInstanceId = val.wfInstanceId
                     wf.name = val.wfName
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processId
                     wf.dept = val.deptId
+                    wf.businessId = val.businessId
                     wfData.push(wf)
                 })
-                // console.log(wfData)
+                console.log(wfData);
+                setWorkflowInstances(wfData);
+                setLoading(false);
             })
-        const test = [
-            {
-                wfId: "red",
-                name: "#f00",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "green",
-                name: "#0f0",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "blue",
-                name: "#00f",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "cyan",
-                name: "#0ff",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "magenta",
-                name: "#f0f",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "yellow",
-                name: "#ff0",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            },
-            {
-                wfId: "black",
-                name: "#000",
-                dateC: "12/10/22",
-                curP: "do xyz",
-                dateU: "14/10/22",
-                dept: "abc"
-            }
-        ];
-        setLoading(false);
-        setWorkflowInstances(test);
+    }
+
+    function handleRowClick(wfInst) {
+        setSelectedRow(wfInst);
+        setDeleteModalShow(true);
     }
 
     if (isLoading) {
@@ -113,7 +61,7 @@ function WorkflowTable() {
                 <Table striped bordered hover>
                     <thead>
                     <tr>
-                        <th>Workflow ID</th>
+                        <th>Workflow Inst. ID</th>
                         <th>Workflow Name</th>
                         <th>Date Created</th>
                         <th>Current Process</th>
@@ -123,8 +71,8 @@ function WorkflowTable() {
                     </thead>
                     <tbody>
                     {workflowInstances.map(wfInst =>
-                        <tr key={wfInst.wfId} onClick={() => setDeleteModalShow(true)}>
-                            <td>{wfInst.wfId}</td>
+                        <tr key={wfInst.wfInstanceId} onClick={() => handleRowClick(wfInst)}>
+                            <td>{wfInst.wfInstanceId}</td>
                             <td>{wfInst.name}</td>
                             <td>{wfInst.dateC}</td>
                             <td>{wfInst.curP}</td>
@@ -139,7 +87,11 @@ function WorkflowTable() {
                 show={deleteModalShow}
                 onHide={() => setDeleteModalShow(false)}
                 modalheading = "Delete Workflow Instance"
-                modaldata = {<DeleteModal onHide={() => setDeleteModalShow(false)}/>}
+                modaldata = {<DeleteModal
+                    setLoading = {setLoading} 
+                    setWorkflowInstances = {setWorkflowInstances}
+                    deleteData = {selectedRow} 
+                    onHide={() => {setDeleteModalShow(false);}}/>}
             />
         </div>
     )
