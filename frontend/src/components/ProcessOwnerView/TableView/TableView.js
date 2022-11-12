@@ -31,51 +31,20 @@ function TableView() {
                     let temp = workflows[key][len - 1]
                     let val = Object.values(temp)[0][0]
                     console.log(val)
-                    // wf.wfInstanceId = val.wfInstanceId
+                    wf.wfInstanceId = val.wfInstanceId
+                    wf.dateC = val.createdDT
                     // wf.name = val.wfName
                     // wf.dateC = val.wfcreatedDT
                     // wf.dateU = val.wfupdatedDT
                     // wf.curP = val.processId
                     // wf.dept = val.deptId
                     // wf.businessId = val.businessId
-                    // wfData.push(wf)
+                    wfData.push(wf)
                 })
-                // console.log(wfData);
-                // setWorkflowInstances(wfData);
-                // setLoading(false);
+                console.log(wfData);
+                setWorkflowInstances(wfData);
+                setLoading(false);
             })
-       const test = [
-        {
-            wfId: "red",
-            value: "#f00"
-        },
-        {
-            wfId: "green",
-            value: "#0f0"
-        },
-        {
-            wfId: "blue",
-            value: "#00f"
-        },
-        {
-            wfId: "cyan",
-            value: "#0ff"
-        },
-        {
-            wfId: "magenta",
-            value: "#f0f"
-        },
-        {
-            wfId: "yellow",
-            value: "#ff0"
-        },
-        {
-            wfId: "black",
-            value: "#000"
-        }
-        ];
-        setLoading(false);
-        setWorkflowInstances(test);
     };
 
     if (isLoading) {
@@ -91,7 +60,7 @@ function TableView() {
             <thead>
                 <tr>
                 <th>Workflow Instance ID</th>
-                <th>Date updated</th>
+                <th>Date Created</th>
                 <th>Details</th>
                 <th>Status</th>
                 </tr>
@@ -99,8 +68,8 @@ function TableView() {
             <tbody>
                 {workflowInstances.map(wfInst =>
                         <tr className = "table_row" key={wfInst.wfId}>
-                            <td>{wfInst.wfId}</td>
-                            <td>{wfInst.value}</td>
+                            <td>{wfInst.wfInstanceId}</td>
+                            <td>{wfInst.dateC}</td>
                             <td className = "btn_row"><Button className = "tv-btn" variant="primary" onClick={() => setDetailModalShow(true)}>Details</Button>{' '}</td>
                             <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => setCompleteModalShow(true)}>Complete</Button>{' '}</td>
                         </tr>
