@@ -43,6 +43,7 @@ function BusinessOwnerView() {
             <ModalView
                 show={addModalShow}
                 modalheading = "Workflows"
+                onHide={() => setAddModalShow(false)}
                 modaldata = {<AddModal onHide={() => setAddModalShow(false)}/>}
             />
             <ModalView

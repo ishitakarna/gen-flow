@@ -4,10 +4,13 @@ import {Table} from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import "./WorkflowTable.css"
 import Api from "../../../api";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import ModalView from '../../ModalView/ModalView.js'
 
 function WorkflowTable() {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
 
     useEffect(() => {
         getAllWorkflowInstances();
@@ -19,6 +22,7 @@ function WorkflowTable() {
         api.getIncompleteWorkFlowsForBO(1)
             .then(result => {
                 let workflows = result.data
+                console.log(workflows);
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
                     let len = workflows[key].length
@@ -119,7 +123,7 @@ function WorkflowTable() {
                     </thead>
                     <tbody>
                     {workflowInstances.map(wfInst =>
-                        <tr key={wfInst.wfId}>
+                        <tr key={wfInst.wfId} onClick={() => setDeleteModalShow(true)}>
                             <td>{wfInst.wfId}</td>
                             <td>{wfInst.name}</td>
                             <td>{wfInst.dateC}</td>
@@ -131,6 +135,12 @@ function WorkflowTable() {
                     </tbody>
                 </Table>
             </div>
+            <ModalView
+                show={deleteModalShow}
+                onHide={() => setDeleteModalShow(false)}
+                modalheading = "Delete Workflow Instance"
+                modaldata = {<DeleteModal onHide={() => setDeleteModalShow(false)}/>}
+            />
         </div>
     )
 }
