@@ -14,13 +14,13 @@ function TableView() {
     const [detailModalShow, setDetailModalShow] = useState(false);
     const [completeModalShow, setCompleteModalShow] = useState(false);
     const [clickedInstance, setClickedInstance] = useState({})
+    const api = new Api();
 
     useEffect(() => {
         getAllWorkflowInstances();
     }, []);
 
     function getAllWorkflowInstances() {
-        const api = new Api();
         const wfData = []
         api.getWorkflowsForP(2)
             .then(result => {
@@ -32,12 +32,23 @@ function TableView() {
                     let val = Object.values(temp)[0][0]
                     wf.wfInstanceId = val.wfInstanceId
                     wf.dateC = val.createdDT
+                    wf.processInstanceId = val.processInstanceId
+                    wf.processId = val.processId
                     wfData.push(wf)
                 })
                 setWorkflowInstances(wfData);
                 setLoading(false);
             })
     };
+
+    function handleComplete() {
+        api.completedProcess(clickedInstance.processInstanceId, clickedInstance.wfInstanceId, clickedInstance.processId).then((d) =>
+        {
+            console.log("posted");
+            console.log(d.data);
+        }
+        );
+    }
 
     if (isLoading) {
         return (
@@ -63,7 +74,7 @@ function TableView() {
                             <td>{wfInst.wfInstanceId}</td>
                             <td>{wfInst.dateC}</td>
                             <td className = "btn_row"><Button className = "tv-btn" variant="primary" onClick={() => setDetailModalShow(true)}>Details</Button>{' '}</td>
-                            <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => setCompleteModalShow(true)}>Complete</Button>{' '}</td>
+                            <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => handleComplete()}>Complete</Button>{' '}</td>
                         </tr>
                 )}
             </tbody>
