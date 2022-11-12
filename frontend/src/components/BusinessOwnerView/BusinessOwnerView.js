@@ -6,17 +6,22 @@ import Button from 'react-bootstrap/Button';
 import ModalView from '../ModalView/ModalView.js'
 import AddModal from "./AddModal/AddModal";
 import ReportModal from "./ReportModal/ReportModal";
+import SearchModal from "./SearchModal/SearchModal";
 
 function BusinessOwnerView({bName}) {
     const [businessName, setBusinessName] = useState("");
     const [searchFilter, setSearchFilter] = useState("");
     const [addModalShow, setAddModalShow] = useState(false);
     const [reportModalShow, setReportModalShow] = useState(false);
+    const [searchModalShow, setSearchModalShow] = useState(false);
 
     useEffect(() => {
         setBusinessName(bName);
     }, []);
 
+    function search(){
+
+    }
     return (
         <div className="bus-container">
             <h1>
@@ -33,8 +38,9 @@ function BusinessOwnerView({bName}) {
                     />
                 </div>
                 <div>
-                    <Button className = "bus-btn" variant="danger" onClick={() => setAddModalShow(true)}>Add</Button>
-                    <Button className = "bus-btn" variant="primary" onClick={() => setReportModalShow(true)}>Report</Button>
+                    <Button className = "bus-btn" variant="primary" onClick={() => setSearchModalShow(true)}>Search</Button>
+                    <Button className = "bus-btn" variant="success" onClick={() => setAddModalShow(true)}>Add</Button>
+                    <Button className = "bus-btn" variant="info" onClick={() => setReportModalShow(true)}>Report</Button>
                 </div>
             </div>
             <div className = "bus-table">
@@ -51,6 +57,12 @@ function BusinessOwnerView({bName}) {
                 onHide={() => setReportModalShow(false)}
                 modalheading = "Report"
                 modaldata = {<ReportModal onHide={() => setReportModalShow(false)}/>}
+            />
+            <ModalView
+                show={searchModalShow}
+                modalheading = "Search"
+                onHide={() => setSearchModalShow(false)}
+                modaldata = {<SearchModal query={searchFilter} onHide={() => setSearchModalShow(false)}/>}
             />
         </div>
     )

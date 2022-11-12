@@ -32,7 +32,7 @@ function WorkflowTable() {
                     wf.name = val.wfName
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
-                    wf.curP = val.processId
+                    wf.curP = val.processName
                     wf.dept = val.deptId
                     wf.businessId = val.businessId
                     wfData.push(wf)
@@ -88,9 +88,9 @@ function WorkflowTable() {
                 onHide={() => setDeleteModalShow(false)}
                 modalheading = "Delete Workflow Instance"
                 modaldata = {<DeleteModal
-                    setLoading = {setLoading} 
+                    setLoading = {setLoading}
                     setWorkflowInstances = {setWorkflowInstances}
-                    deleteData = {selectedRow} 
+                    deleteData = {selectedRow}
                     onHide={() => {setDeleteModalShow(false);}}/>}
             />
         </div>
