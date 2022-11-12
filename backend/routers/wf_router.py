@@ -32,3 +32,7 @@ async def get_incomplete_workflow_instances_for_user(userId: int, db: Session = 
 @router.delete('/instances/delete/{wfInstanceId}/{businessId}')
 async def delete_workflow_instance(wfInstanceId: int, businessId: int, db: Session = Depends(get_db)):
     return wf_crud.delete_workflow_instance(db, wfInstanceId=wfInstanceId, businessId=businessId)
+
+@router.get("/instances/report/{businessId}")
+async def report_completed_counts(businessId: int, db: Session = Depends(get_db)):
+    return wf_crud.report_completed_counts(db, businessId=businessId)
