@@ -15,9 +15,24 @@ function WorkflowTable() {
 
     function getAllWorkflowInstances() {
         const api = new Api();
+        const wfData = []
         api.getIncompleteWorkFlowsForBO(1)
             .then(result => {
-                console.log(result.data)
+                let workflows = result.data
+                Object.keys(workflows).forEach(function(key){
+                    let wf = {}
+                    let len = workflows[key].length
+                    let val = workflows[key][len - 1]
+                    console.log(val)
+                    wf.wfInstanceId = val.wfInstanceId
+                    wf.name = val.wfName
+                    wf.dateC = val.wfcreatedDT
+                    wf.dateU = val.wfupdatedDT
+                    wf.curP = val.processId
+                    wf.dept = val.deptId
+                    wfData.push(wf)
+                })
+                // console.log(wfData)
             })
         const test = [
             {
@@ -79,7 +94,7 @@ function WorkflowTable() {
         ];
         setLoading(false);
         setWorkflowInstances(test);
-    };
+    }
 
     if (isLoading) {
         return (
