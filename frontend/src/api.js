@@ -3,7 +3,7 @@ import axios from "axios";
 export default class Api {
     constructor() {
         this.client = null;
-        this.api_url = "https://37a2-76-191-27-122.ngrok.io";
+        this.api_url = "https://83aa-76-191-27-122.ngrok.io/";
     }
 
     init = () => {
@@ -51,5 +51,9 @@ export default class Api {
 
     getWorkflowDetails = (wfInstId) => {
         return this.init().get(`/workflows/instances/search/${wfInstId}`);
+    }
+
+    getReport = (buId) => {
+        return this.init().get(`/workflows/instances/report/${buId}`);
     }
 }

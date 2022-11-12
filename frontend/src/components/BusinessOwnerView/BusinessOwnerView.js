@@ -50,7 +50,7 @@ function BusinessOwnerView({bName}) {
                 show={reportModalShow}
                 onHide={() => setReportModalShow(false)}
                 modalheading = "Report"
-                modaldata = {<ReportModal/>}
+                modaldata = {<ReportModal onHide={() => setReportModalShow(false)}/>}
             />
         </div>
     )
