@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 import datetime
+import itertools
 
 def get_workflow_types_for_business(db: Session, businessId: int):
     query = text('select * from Workflows where businessId = {businessId}'.format(businessId= businessId))
@@ -14,7 +15,15 @@ def get_incomplete_workflow_instances_for_business(db: Session, businessId: int)
     print(query)
     result = db.execute(query)
     workflow_obj_arr = list(result.fetchall())
-    return workflow_obj_arr
+    hashmap = {}
+    for key, group in itertools.groupby(workflow_obj_arr, lambda item: item["wfInstanceId"]):
+        hashmap[key] = []
+        # hashmap[key] = [item for item in group]
+        hashmap1 = {}
+        for key1,group1 in itertools.groupby(group, lambda item1: item1["processInstanceId"]):
+            hashmap1[key1] = [item1 for item1 in group1]
+        hashmap[key].append(hashmap1)
+    return hashmap
 
 def add_workflow_instance(db: Session, wfId: int):
     createdDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
