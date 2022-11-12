@@ -48,4 +48,8 @@ export default class Api {
     getWorkflowsForP = (userId) => {
         return this.init().get(`/workflows/instances/po/${userId}`);
     }
+
+    getWorkflowDetails = (wfInstId) => {
+        return this.init().get(`/workflows/instances/search/${wfInstId}`);
+    }
 }
