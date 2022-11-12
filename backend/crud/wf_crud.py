@@ -25,14 +25,14 @@ def get_incomplete_workflow_instances_for_business(db: Session, businessId: int)
         hashmap[key].append(hashmap1)
     return hashmap
 
-def add_workflow_instance(db: Session, wfId: int):
+def add_workflow_instance(db: Session, wfId: int, businessId: int):
     createdDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # wfInstanceId = int(db.execute(text('select max(wfInstanceId) from WorkflowInstances')).first()[0])+1
-    # print(wfInstanceId[0])
-    print(datetime.datetime(1, 1, 1, 0, 0))
-
-    query = text('insert into WorkflowInstances (createdDT,wfId, updatedDT, completedDT) values (\''+createdDT+'\','+str(wfId)+',\''+datetime.datetime.strptime('0000-00-00 00:00:00', "%Y-%m-%d %H:%M:%S")+',\''+datetime.datetime.strptime('0000-00-00 00:00:00', "%Y-%m-%d %H:%M:%S")+'\'')
-    print(query)
-    # result = db.execute(query)
-    # return result.fetchall()
-    return {"hehe": True}
+    query = text('insert into WorkflowInstances (createdDT,wfId, updatedDT, completedDT) values (\''+createdDT+'\','+str(wfId)+',\''+str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S"))+'\',\''+str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S"))+'\')')
+    result = db.execute(query)
+    query1 = text('select max(wfInstanceId) from WorkflowInstances')
+    wfInstanceId = db.execute(query1).first()[0]
+    query2 = text('select processId from Processes where seqNumber=1 and wfId='+str(wfId))
+    processId = db.execute(query2).first()[0]
+    query3 = text(f'insert into ProcessInstances(createdDT, completedDT, processId, wfInstanceId) values (\''+createdDT+'\',\''+str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S"))+'\','+str(processId)+','+str(wfInstanceId)+')')
+    db.execute(query3)
+    return get_incomplete_workflow_instances_for_business(db,businessId=businessId)

@@ -17,6 +17,6 @@ async def get_workflow_types_for_business(businessId: int, db: Session = Depends
 async def abc(businessId: int, db: Session = Depends(get_db)):
     return wf_crud.get_incomplete_workflow_instances_for_business(db, businessId=businessId)
 
-@router.post("/instances/add/{wfId}")
-async def abc(wfId: int, db: Session = Depends(get_db)):
-    return wf_crud.add_workflow_instance(db, wfId=wfId)
+@router.post("/instances/add/{wfId}/{businessId}")
+async def abc(wfId: int, businessId: int, db: Session = Depends(get_db)):
+    return wf_crud.add_workflow_instance(db, wfId=wfId, businessId=businessId)
