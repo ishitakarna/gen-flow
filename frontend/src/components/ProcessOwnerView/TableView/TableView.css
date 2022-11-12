@@ -1,11 +1,9 @@
-.container {
-    height: 100%;
-    padding: 0;
-    margin-top: 0;
+.tv-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    margin-top: 30px;
 }
 
 .loader {
@@ -13,14 +11,10 @@
     padding: 10px;
 }
 
-.table_box {
-    width: 100%;
-}
-
-.btn {
+.tv-btn {
     font-size: 12px;
 }
 
-.btn_row {
+.tv-btn_row {
     text-align: center;
 }

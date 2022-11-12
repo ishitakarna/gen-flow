@@ -3,10 +3,15 @@ import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import "./TableView.css"
+import ModalView from '../../ModalView/ModalView.js'
+import DetailModal from "./DetailModal/DetailModal";
+import CompleteModal from "./CompleteModal/CompleteModal";
 
 function TableView() {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [detailModalShow, setDetailModalShow] = useState(false);
+    const [completeModalShow, setCompleteModalShow] = useState(false);
 
     useEffect(() => {
         getAllWorkflowInstances();
@@ -55,8 +60,7 @@ function TableView() {
         ) 
     }
     return (
-        <div className="container">
-            <div className = "table_box">
+        <div className="tv-container">
             <Table striped bordered hover>
             <thead>
                 <tr>
@@ -71,13 +75,24 @@ function TableView() {
                         <tr className = "table_row" key={wfInst.wfId}>
                             <td>{wfInst.wfId}</td>
                             <td>{wfInst.value}</td>
-                            <td className = "btn_row"><Button className = "btn" variant="primary">Details</Button>{' '}</td>
-                            <td className = "btn_row"><Button className = "btn" variant="outline-success">Complete</Button>{' '}</td>
+                            <td className = "btn_row"><Button className = "tv-btn" variant="primary" onClick={() => setDetailModalShow(true)}>Details</Button>{' '}</td>
+                            <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => setCompleteModalShow(true)}>Complete</Button>{' '}</td>
                         </tr>
                 )}
             </tbody>
             </Table>
-            </div>
+            <ModalView
+                show={detailModalShow}
+                onHide={() => setDetailModalShow(false)}
+                modalHeading = "Workflow Instance Details"
+                modalData = {<DetailModal/>}
+            />
+            <ModalView
+                show={completeModalShow}
+                onHide={() => setCompleteModalShow(false)}
+                modalHeading = "Process completion parameters"
+                modalData = {<CompleteModal/>}
+            />
         </div>
     )
 }

@@ -3,10 +3,15 @@ import { useState, useEffect } from "react";
 import "./BusinessOwnerView.css"
 import WorkflowTable from "./WorkflowTable/WorkflowTable";
 import Button from 'react-bootstrap/Button';
+import ModalView from '../ModalView/ModalView.js'
+import AddModal from "./AddModal/AddModal";
+import ReportModal from "./ReportModal/ReportModal";
 
 function BusinessOwnerView() {
     const [businessName, setBusinessName] = useState("");
     const [searchFilter, setSearchFilter] = useState("");
+    const [addModalShow, setAddModalShow] = useState(false);
+    const [reportModalShow, setReportModalShow] = useState(false);
 
     useEffect(() => {
         setBusinessName("X");
@@ -28,13 +33,25 @@ function BusinessOwnerView() {
                     />
                 </div>
                 <div>
-                    <Button className = "bus-btn" variant="danger">Add</Button>
-                    <Button className = "bus-btn" variant="primary">Report</Button>
+                    <Button className = "bus-btn" variant="danger" onClick={() => setAddModalShow(true)}>Add</Button>
+                    <Button className = "bus-btn" variant="primary" onClick={() => setReportModalShow(true)}>Report</Button>
                 </div>
             </div>
             <div className = "bus-table">
                 <WorkflowTable/>
             </div>
+            <ModalView
+                show={addModalShow}
+                onHide={() => setAddModalShow(false)}
+                modalHeading = "Workflows"
+                modalData = {<AddModal/>}
+            />
+            <ModalView
+                show={reportModalShow}
+                onHide={() => setReportModalShow(false)}
+                modalHeading = "Report"
+                modalData = {<ReportModal/>}
+            />
         </div>
     )
 }

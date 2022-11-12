@@ -24,9 +24,9 @@ function ProcessOwnerView() {
                 value={searchFilter}
                 onChange = {e => setSearchFilter(e.target.value)}
                 />
+            </div>
             <div className="table-view">
                 <TableView/>
-            </div>
             </div>
         </div>
     )
