@@ -11,7 +11,9 @@ def get_workflow_types_for_business(db: Session, businessId: int):
 
 def get_incomplete_workflow_instances_for_business(db: Session, businessId: int):
     wf_ins_join_wf = 'select wfInstanceId, createdDT as wfcreatedDT, updatedDT as wfupdatedDT, completedDT as wfcompletedDT, Workflows.wfId, wfName, wfDescription, businessId from WorkflowInstances join Workflows on Workflows.wfId = WorkflowInstances.wfId where completedDT = \"2001-01-01T00:00:00\" and businessId = {businessId} order by createdDT desc limit 10'.format(businessId = businessId)
-    query = text('select * from Processes join ProcessInstances on Processes.processId = ProcessInstances.processId join ({wf_ins_join_wf}) as ABC on ABC.wfId = Processes.wfId and ABC.wfInstanceId = ProcessInstances.wfInstanceId left join Parameters on Parameters.processId = Processes.processId left join ParamInstances on Parameters.paramId = ParamInstances.paramId and ParamInstances.processInstanceId = ProcessInstances.processInstanceId'.format(wf_ins_join_wf=wf_ins_join_wf))
+    query = text('select * from Processes join ProcessInstances on Processes.processId = ProcessInstances.processId join ({wf_ins_join_wf}) as ABC on ABC.wfId = Processes.wfId and ABC.wfInstanceId = ProcessInstances.wfInstanceId'.format(wf_ins_join_wf=wf_ins_join_wf))
+    # wf_ins_join_wf = 'select wfInstanceId, createdDT as wfcreatedDT, updatedDT as wfupdatedDT, completedDT as wfcompletedDT, Workflows.wfId, wfName, wfDescription, businessId from WorkflowInstances join Workflows on Workflows.wfId = WorkflowInstances.wfId where completedDT = \"2001-01-01T00:00:00\" and businessId = {businessId} order by createdDT desc limit 10'.format(businessId = businessId)
+    # query = text('select * from Processes join ProcessInstances on Processes.processId = ProcessInstances.processId join ({wf_ins_join_wf}) as ABC on ABC.wfId = Processes.wfId and ABC.wfInstanceId = ProcessInstances.wfInstanceId left join Parameters on Parameters.processId = Processes.processId left join ParamInstances on Parameters.paramId = ParamInstances.paramId and ParamInstances.processInstanceId = ProcessInstances.processInstanceId'.format(wf_ins_join_wf=wf_ins_join_wf))
     print(query)
     result = db.execute(query)
     workflow_obj_arr = list(result.fetchall())
@@ -21,6 +23,7 @@ def get_incomplete_workflow_instances_for_business(db: Session, businessId: int)
         # hashmap[key] = [item for item in group]
         hashmap1 = {}
         for key1,group1 in itertools.groupby(group, lambda item1: item1["processInstanceId"]):
+            # print(key1, group1)
             hashmap1[key1] = [item1 for item1 in group1]
         hashmap[key].append(hashmap1)
     return hashmap
