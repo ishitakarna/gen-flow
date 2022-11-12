@@ -10,21 +10,21 @@ router = APIRouter(
     tags=["process"]
 )
 
-class ParamInstances(BaseModel):
+class ProcessParamInstances(BaseModel):
     paramVal: str
-    processInstanceId: str
-    paramId: str
+    processInstanceId: int
+    paramId: int
 
 @router.get("/parameters/{processId}")
 async def get_params_for_process_completion(processId: int, db: Session = Depends(get_db)):
     return process_crud.get_params_for_process_completion(db, processId=processId)
 
 @router.post("/complete/{processInstanceId}")
-async def complete_process_instance(processInstanceId: int, db: Session = Depends(get_db)):
+async def complete_process_instance(processInstanceId: int, processParamInstances: list[ProcessParamInstances],db: Session = Depends(get_db)):
     # Input - parameters required for the process type
     # Check if this is the last process - if yes then complete the workflow instance as well
     # If not, then complete and update the process instance, update the workflow instance and start the next process
-
+    
 
     pass
 

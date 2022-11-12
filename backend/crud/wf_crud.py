@@ -56,3 +56,24 @@ def search_workflowInstance_by_wfInstanceId(db: Session, wfInstanceId: int):
             hashmap1[key1] = [item1 for item1 in group1]
         hashmap[key].append(hashmap1)
     return hashmap
+
+def delete_workflow_instance(db: Session, wfInstanceId: int, businessId: int):
+    query = text('delete from WorkflowInstances where wfInstanceId = {wfInstanceId}'.format(wfInstanceId=wfInstanceId))
+    result = db.execute(query)
+    return get_incomplete_workflow_instances_for_business(db,businessId=businessId)
+
+def get_incomplete_workflow_instances_for_user(db: Session, userId: int):
+    pass
+    query = text('select * from (select * from ProcessInstances where wfInstanceId in (select wfInstanceId from ProcessInstances join (select processId from Processes where deptId=(select deptId from UserDepartment where userId={userId})) as pro on ProcessInstances.processId=pro.processId where completedDT="2001-01-01T00:00:00")) as proI left join (select * from ParamInstances natural join Parameters) as par on proI.processInstanceId=par.processInstanceId;'.format(userId=userId))
+    result = db.execute(query)
+    workflow_obj_arr = list(result.fetchall())
+    hashmap = {}
+    for key, group in itertools.groupby(workflow_obj_arr, lambda item: item["wfInstanceId"]):
+        hashmap[key] = []
+        # hashmap[key] = [item for item in group]
+        hashmap1 = {}
+        for key1,group1 in itertools.groupby(group, lambda item1: item1["processInstanceId"]):
+            # print(key1, group1)
+            hashmap1[key1] = [item1 for item1 in group1]
+        hashmap[key].append(hashmap1)
+    return hashmap

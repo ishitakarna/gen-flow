@@ -1,5 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from pydantic import BaseModel
+
+
 
 def get_params_for_process_completion(db: Session, processId: int):
     query = text('select * from Parameters where processId = {processId}'.format(processId= processId))
@@ -7,8 +10,12 @@ def get_params_for_process_completion(db: Session, processId: int):
     process_params = list(result.fetchall())
     return process_params
 
-# TODO: Test
-# def delete_workflow_instance(db: Session, wfInstanceId: int, businessId: int):
-#     query = text('delete from WorkflowInstances where wfInstanceId = {wfInstanceId}'.format(wfInstanceId=wfInstanceId))
-#     result = db.execute(query)
-#     return get_incomplete_workflow_instances_for_business(db,businessId=businessId)
+def complete_process(processInstanceId: int, processParamInstances, db: Session):
+
+    # Get workflow id from process instance id and 
+    # select wfId from (select wfInstanceId from ProcessInstances where processInstanceId = {processInstanceId}) as ABC join WorkflowInstances on WorkflowInstances.wfInstanceId = ABC.wfInstanceId
+    # Get max process id
+    # select max(processId) from Processes where wfId = (select wfId from (select wfInstanceId from ProcessInstances where processInstanceId = {processInstanceId}) as ABC join WorkflowInstances on WorkflowInstances.wfInstanceId = ABC.wfInstanceId)
+
+
+    pass
