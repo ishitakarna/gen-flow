@@ -11,15 +11,12 @@ function ModalView(props) {
     >
      <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          {props.modalHeading}
+          {props.modalheading}
           </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {props.modalData}
+        {props.modaldata}
       </Modal.Body>
-      <Modal.Footer>
-          <Button onClick={props.onHide}>{props.closeButton? props.closeButton : "Close"}</Button>
-      </Modal.Footer>
     </Modal>
   );
 }

@@ -42,16 +42,14 @@ function BusinessOwnerView() {
             </div>
             <ModalView
                 show={addModalShow}
-                onHide={() => setAddModalShow(false)}
-                modalHeading = "Workflows"
-                modalData = {<AddModal/>}
-                closeButton = "Add" 
+                modalheading = "Workflows"
+                modaldata = {<AddModal onHide={() => setAddModalShow(false)}/>}
             />
             <ModalView
                 show={reportModalShow}
                 onHide={() => setReportModalShow(false)}
-                modalHeading = "Report"
-                modalData = {<ReportModal/>}
+                modalheading = "Report"
+                modaldata = {<ReportModal/>}
             />
         </div>
     )

@@ -25,7 +25,13 @@ export default class Api {
         return this.init().get(`/workflows/instances/incomplete/${buId}`);
     };
 
-    addNewUser = (data) => {
-        return this.init().post("/users", data);
-    };
+    getWorkflowsForB = (buId) => {
+        return this.init().get(`/workflows/metadata/${buId}`);
+    }
+
+    createWorkflowInstanceForB = (workflow) => {
+        console.log("inside api");
+        // console.log(workflow);
+        return this.init().post(`/workflows/instances/add/${workflow.wfId}/${workflow.businessId}`);
+    }
 }

@@ -1,27 +1,35 @@
 import Form from 'react-bootstrap/Form';
 import { useState, useEffect } from "react";
+import Api from "../../../api";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
-function AddModal() {
+function AddModal(props) {
     const [workflows, setWorkflows] = useState([]);
-    const [selectedWF, setSelectedWF] = useState(1);
+    const [selectedWF, setSelectedWF] = useState({});
+    const api = new Api();
 
     useEffect(() => {
         getAllWorkflows();
     }, []);
 
     function getAllWorkflows() {
-        const test = [
-            {
-                wfId : 1,
-                wfName: "Online Food Order"
-            },
-            {
-                wfId : 2,
-                wfName: "Dine In Order"
-            }
-        ];
-        setWorkflows(test);
+        let test = [];
+
+        api.getWorkflowsForB(1)
+            .then(result => {
+                test = result.data;
+                console.log(test);
+                setWorkflows(test);
+        })
     };
+
+    function handleAddWorkflow() {
+        api.createWorkflowInstanceForB(selectedWF).then((d) => {
+            console.log(d.data);
+        });
+        props.onHide();
+    }
 
     return (
         <>
@@ -32,13 +40,17 @@ function AddModal() {
                     type="radio"
                     id={workflow.wfId}
                     label={workflow.wfName}
-                    checked={workflow.wfId == selectedWF}
-                    onChange={() => setSelectedWF(workflow.wfId)}
+                    checked={workflow.wfId == selectedWF.wfId}
+                    onChange={() => setSelectedWF(workflow)}
                 />
+                <p>{workflow.wfDescription}</p>
             </div>
             ))
         }
         </Form>
+        <Modal.Footer>
+          <Button onClick={handleAddWorkflow}>{"Add"}</Button>
+        </Modal.Footer>
         </>
     )
 }
