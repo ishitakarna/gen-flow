@@ -5,7 +5,7 @@ function ModalView(props) {
   return (
     <Modal
       {...props}
-      size="lg"
+      // size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -18,7 +18,7 @@ function ModalView(props) {
         {props.modalData}
       </Modal.Body>
       <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
+          <Button onClick={props.onHide}>{props.closeButton? props.closeButton : "Close"}</Button>
       </Modal.Footer>
     </Modal>
   );
