@@ -10,8 +10,8 @@ def get_workflow_types_for_business(db: Session, businessId: int):
     return workflow_obj_arr
 
 def get_incomplete_workflow_instances_for_business(db: Session, businessId: int):
-    wf_ins_join_wf = 'select wfInstanceId, createdDT as wfcreatedDT, updatedDT as wfupdatedDT, completedDT as wfcompletedDT, Workflows.wfId, wfName, wfDescription, businessId from WorkflowInstances join Workflows on Workflows.wfId = WorkflowInstances.wfId where completedDT <= \"2001-01-01T00:00:00\" and businessId = {businessId} order by createdDT desc limit 10'.format(businessId = businessId)
-    query = text('select * from Processes join ProcessInstances on Processes.processId = ProcessInstances.processId join ({wf_ins_join_wf}) as ABC on ABC.wfId = Processes.wfId and ABC.wfInstanceId = ProcessInstances.wfInstanceId join Parameters on Parameters.processId = Processes.processId join ParamInstances on Parameters.paramId = ParamInstances.paramId and ParamInstances.processInstanceId = ProcessInstances.processInstanceId'.format(wf_ins_join_wf=wf_ins_join_wf))
+    wf_ins_join_wf = 'select wfInstanceId, createdDT as wfcreatedDT, updatedDT as wfupdatedDT, completedDT as wfcompletedDT, Workflows.wfId, wfName, wfDescription, businessId from WorkflowInstances join Workflows on Workflows.wfId = WorkflowInstances.wfId where completedDT = \"2001-01-01T00:00:00\" and businessId = {businessId} order by createdDT desc limit 10'.format(businessId = businessId)
+    query = text('select * from Processes join ProcessInstances on Processes.processId = ProcessInstances.processId join ({wf_ins_join_wf}) as ABC on ABC.wfId = Processes.wfId and ABC.wfInstanceId = ProcessInstances.wfInstanceId left join Parameters on Parameters.processId = Processes.processId left join ParamInstances on Parameters.paramId = ParamInstances.paramId and ParamInstances.processInstanceId = ProcessInstances.processInstanceId'.format(wf_ins_join_wf=wf_ins_join_wf))
     print(query)
     result = db.execute(query)
     workflow_obj_arr = list(result.fetchall())
@@ -33,6 +33,6 @@ def add_workflow_instance(db: Session, wfId: int, businessId: int):
     wfInstanceId = db.execute(query1).first()[0]
     query2 = text('select processId from Processes where seqNumber=1 and wfId='+str(wfId))
     processId = db.execute(query2).first()[0]
-    query3 = text(f'insert into ProcessInstances(createdDT, completedDT, processId, wfInstanceId) values (\''+createdDT+'\',\''+str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S"))+'\','+str(processId)+','+str(wfInstanceId)+')')
+    query3 = text('insert into ProcessInstances(createdDT, completedDT, processId, wfInstanceId) values (\''+createdDT+'\',\''+str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S"))+'\','+str(processId)+','+str(wfInstanceId)+')')
     db.execute(query3)
     return get_incomplete_workflow_instances_for_business(db,businessId=businessId)
