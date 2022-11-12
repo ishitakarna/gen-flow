@@ -1,18 +1,8 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import './Login.scss';
+import Api from "../../api";
 import {Button, Form} from "react-bootstrap";
-
-async function loginUser(credentials) {
-    return fetch('http://localhost:8080/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
-        .then(data => data.json())
-}
 
 export default function Login({setToken}) {
     const [username, setUserName] = useState();
@@ -20,11 +10,17 @@ export default function Login({setToken}) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await loginUser({
-            username,
-            password
-        });
-        setToken(token);
+        const api = new Api();
+        let token = null
+        api.loginUser(username, password).then( res => {
+            let resp = res.data
+            if(resp.status === false){
+                alert("Incorrect Email or Password")
+            } else {
+                setToken(token)
+                sessionStorage.setItem("token", JSON.stringify(resp))
+            }
+        })
     }
     return (
         <div className="login-wrapper">

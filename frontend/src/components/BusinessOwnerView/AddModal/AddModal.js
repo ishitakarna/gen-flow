@@ -19,10 +19,9 @@ function AddModal(props) {
         api.getWorkflowsForB(1)
             .then(result => {
                 test = result.data;
-                console.log(test);
                 setWorkflows(test);
         })
-    };
+    }
 
     function handleAddWorkflow() {
         api.createWorkflowInstanceForB(selectedWF).then((d) => {
@@ -40,7 +39,7 @@ function AddModal(props) {
                     type="radio"
                     id={workflow.wfId}
                     label={workflow.wfName}
-                    checked={workflow.wfId == selectedWF.wfId}
+                    checked={workflow.wfId === selectedWF.wfId}
                     onChange={() => setSelectedWF(workflow)}
                 />
                 <p>{workflow.wfDescription}</p>

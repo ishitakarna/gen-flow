@@ -7,20 +7,20 @@ import ModalView from '../ModalView/ModalView.js'
 import AddModal from "./AddModal/AddModal";
 import ReportModal from "./ReportModal/ReportModal";
 
-function BusinessOwnerView() {
+function BusinessOwnerView({bName}) {
     const [businessName, setBusinessName] = useState("");
     const [searchFilter, setSearchFilter] = useState("");
     const [addModalShow, setAddModalShow] = useState(false);
     const [reportModalShow, setReportModalShow] = useState(false);
 
     useEffect(() => {
-        setBusinessName("X");
+        setBusinessName(bName);
     }, []);
 
     return (
         <div className="bus-container">
             <h1>
-                Business {businessName}
+                {businessName}
             </h1>
             <div className = "bus-filter">
                 <div className = "bus-search-box">

@@ -3,18 +3,18 @@ import { useState, useEffect } from "react";
 import TableView from "./TableView/TableView";
 import "./ProcessOwnerView.css"
 
-function ProcessOwnerView() {
+function ProcessOwnerView({businessName}) {
     const [processName, setProcessName] = useState("");
     const [searchFilter, setSearchFilter] = useState("");
 
     useEffect(() => {
-        setProcessName("X")
+        setProcessName(businessName)
     }, []);
 
     return (
         <div className="container">
             <h1>
-                Process {processName}
+                Process in {processName}
             </h1>
             <div className = "search-box">
                 <input id="filter"

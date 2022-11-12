@@ -33,6 +33,14 @@ export default class Api {
         return this.init().post(`/workflows/instances/add/${workflow.wfId}/${workflow.businessId}`);
     }
 
+    loginUser = (email, password) => {
+        let body = {
+            email: email,
+            passwd: password
+        }
+        return this.init().post(`/user/login`, body);
+    }
+
     deleteWorkflowInstance = (workflow) => {
         return this.init().delete(`/workflows/instances/delete/${workflow.wfInstanceId}/${workflow.businessId}`);
     }
