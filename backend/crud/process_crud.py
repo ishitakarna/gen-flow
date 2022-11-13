@@ -37,7 +37,7 @@ def complete_process(processInstanceId: int, wfInstanceId: int, processId: int, 
         query_update_wf_instance = text('update WorkflowInstances set updatedDT = \'{updatedDT}\' where wfInstanceId = {wfInstanceId}'.format(updatedDT=updatedDT, wfInstanceId=wfInstanceId))
         db.execute(query_update_wf_instance)
         # Create next process instance
-        query_insert_process_instance = text('insert into ProcessInstances (createdDT, completedDT, processId, wfInstanceId) values (\'{createdDT}\',\'{completedDT}\', {processId}, {wfInstanceId})'.format(createdDT=createdDT, completedDT=completedDT, processId=processId + 1, wfInstanceId=wfInstanceId))
+        query_insert_process_instance = text('insert into ProcessInstances (createdDT, completedDT, processId, wfInstanceId) values (\'{createdDT}\',\'{completedDT}\', {processId}, {wfInstanceId})'.format(createdDT=createdDT, completedDT=str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S")), processId=processId + 1, wfInstanceId=wfInstanceId))
         db.execute(query_insert_process_instance)
 
     return {"Updated Process": True}
