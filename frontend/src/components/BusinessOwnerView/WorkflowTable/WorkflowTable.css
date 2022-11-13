@@ -1,0 +1,18 @@
+.wt-container {
+    height: 100%;
+    padding: 0;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.wt-loader {
+    text-align: center;
+    padding: 10px;
+}
+
+.wt-table_box {
+    width: 100%;
+}
