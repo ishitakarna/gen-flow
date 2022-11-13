@@ -1,0 +1,4 @@
+fastapi
+pymsql
+sqlalchemy
+json

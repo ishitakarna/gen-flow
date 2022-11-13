@@ -3,7 +3,7 @@ import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root@35.184.42.230:3306/genflow"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root@35.184.42.230:3306/flowgen"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
