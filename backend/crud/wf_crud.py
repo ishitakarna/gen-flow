@@ -92,7 +92,7 @@ def search_workflowInstance_by_wfInstanceId(db: Session, wfInstanceId: int):
     result = db.execute(q5)
     result = db.execute('select * from j5J4JoinParamIns')
     workflow_obj_arr = list(result.fetchall())
-    return workflow_obj_arr
+    return jsonify_workflow_result(workflow_obj_arr)
 
 def delete_workflow_instance(db: Session, wfInstanceId: int, businessId: int):
     query = text('delete from WorkflowInstances where wfInstanceId = {wfInstanceId}'.format(wfInstanceId=wfInstanceId))
