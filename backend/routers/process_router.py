@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
-from ..database.mysql import get_db
-from ..crud import process_crud
+from database.mysql import get_db
+from crud import process_crud
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from pydantic import BaseModel
@@ -12,8 +12,9 @@ router = APIRouter(
 
 class CompleteProcess(BaseModel):
     processInstanceId: int
+    seqNumber: int
+    wfId: int
     wfInstanceId: int
-    processId: int
 
     # 4892
     # 930
@@ -29,6 +30,6 @@ async def complete_process_instance(completeProcessObj: CompleteProcess, db: Ses
     # Input - parameters required for the process type
     # Check if this is the last process - if yes then complete the workflow instance as well
     # If not, then complete and update the process instance, update the workflow instance and start the next process
-    return process_crud.complete_process(processInstanceId=completeProcessObj.processInstanceId, wfInstanceId=completeProcessObj.wfInstanceId, processId=completeProcessObj.processId, processParamInstances=None, db=db)
+    return process_crud.complete_process(wfId=completeProcessObj.wfId, wfInstanceId=completeProcessObj.wfInstanceId, processInstanceId=completeProcessObj.processInstanceId, seqNumber=completeProcessObj.seqNumber, processParamInstances=None, db=db)
 
 

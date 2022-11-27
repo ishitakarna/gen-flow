@@ -17,28 +17,41 @@ def get_params_for_process_completion(db: Session, processId: int):
     process_params = list(result.fetchall())
     return process_params
 
-def complete_process(processInstanceId: int, wfInstanceId: int, processId: int, processParamInstances: ProcessParamInstanceList, db: Session):
-    query_last_process = text('select max(processId) as pr from Processes where wfId = (select wfId from (select wfInstanceId from ProcessInstances where processInstanceId = {processInstanceId}) as ABC join WorkflowInstances on WorkflowInstances.wfInstanceId = ABC.wfInstanceId)'.format(processInstanceId=processInstanceId))
-    result_last_process = db.execute(query_last_process)
+def complete_process(wfId: int,wfInstanceId: int, processInstanceId: int, seqNumber: int, processParamInstances: ProcessParamInstanceList, db: Session):
+    db.begin()
+    try:
+        completedDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        updatedDT = completedDT
+        createdDT = completedDT
 
-    # Update completed time of process instance
-    completedDT = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    updatedDT = completedDT
-    createdDT = completedDT
+        query_update_process_instance = text('update ProcessInstances set completedDT = \'{completedDT}\' where processInstanceId = {processInstanceId}'.format(completedDT=completedDT, updatedDT=updatedDT, processInstanceId=processInstanceId))
+        db.execute(query_update_process_instance)
 
-    query_update_process_instance = text('update ProcessInstances set completedDT = \'{completedDT}\' where processInstanceId = {processInstanceId}'.format(completedDT=completedDT, updatedDT=updatedDT, processInstanceId=processInstanceId))
-    db.execute(query_update_process_instance)
-    
-    if result_last_process.fetchone()['pr'] == processId:
-        # complete time of workflow instance
-        query_update_wf_instance = text('update WorkflowInstances set completedDT = \'{completedDT}\', updatedDT = \'{updatedDT}\' where wfInstanceId = {wfInstanceId}'.format(completedDT=completedDT, updatedDT=updatedDT, wfInstanceId=wfInstanceId))
-        db.execute(query_update_wf_instance)
-    else:
-        query_update_wf_instance = text('update WorkflowInstances set updatedDT = \'{updatedDT}\' where wfInstanceId = {wfInstanceId}'.format(updatedDT=updatedDT, wfInstanceId=wfInstanceId))
-        db.execute(query_update_wf_instance)
-        # Create next process instance
-        query_insert_process_instance = text('insert into ProcessInstances (createdDT, completedDT, processId, wfInstanceId) values (\'{createdDT}\',\'{completedDT}\', {processId}, {wfInstanceId})'.format(createdDT=createdDT, completedDT=str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S")), processId=processId + 1, wfInstanceId=wfInstanceId))
-        db.execute(query_insert_process_instance)
+        query_next_process_id = text(
+            'select processId from Processes where wfId= {wfId} and seqNumber= {seqNumber}'.format(wfId=wfId,
+                                                                                                  seqNumber=seqNumber + 1))
+        result_next_process_id = db.execute(query_next_process_id)
+        result_next_process_id = result_next_process_id.fetchone()
+        print(result_next_process_id)
+        if result_next_process_id:
+            query_update_wf_instance = text(
+                'update WorkflowInstances set updatedDT = \'{updatedDT}\' where wfInstanceId = {wfInstanceId}'.format(
+                    updatedDT=updatedDT, wfInstanceId=wfInstanceId))
+            db.execute(query_update_wf_instance)
 
+            query_insert_process_instance = text(
+                'insert into ProcessInstances (createdDT, completedDT, processId, wfInstanceId) values (\'{createdDT}\',\'{completedDT}\', {processId}, {wfInstanceId})'.format(
+                    createdDT=createdDT,
+                    completedDT=str(datetime.datetime.strptime('2001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S")),
+                    processId=result_next_process_id[0], wfInstanceId=wfInstanceId))
+            db.execute(query_insert_process_instance)
+        else:
+            query_update_wf_instance = text(
+                'update WorkflowInstances set completedDT = \'{completedDT}\', updatedDT = \'{updatedDT}\' where wfInstanceId = {wfInstanceId}'.format(
+                    completedDT=completedDT, updatedDT=updatedDT, wfInstanceId=wfInstanceId))
+            db.execute(query_update_wf_instance)
+        db.commit()
+    except:
+        db.rollback()
+        raise
     return {"Updated Process": True}
-
