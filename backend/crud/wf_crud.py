@@ -76,7 +76,8 @@ def get_incomplete_workflow_instances_for_business(db: Session, businessId: int)
 def add_workflow_instance(db: Session, wfId: int, businessId: int):
     call_proc = 'call AddWorkflowInstance({wfId})'.format(wfId = wfId)
     db.execute(call_proc)
-    return get_incomplete_workflow_instances_for_business(db,businessId=businessId)
+    result = db.execute('select * from j5J4JoinParamIns')
+    return jsonify_workflow_result(result)
 
 def search_workflowInstance_by_wfInstanceId(db: Session, wfInstanceId: int):
     q1 = 'create or replace view j1WfInsJoinWf as select wfInstanceId as j1WfInstanceId, createdDT as wfcreatedDT, updatedDT as wfupdatedDT, completedDT as wfcompletedDT, Workflows.wfId as j1WfId, wfName, wfDescription, businessId as j1BusinessId from WorkflowInstances join Workflows on Workflows.wfId = WorkflowInstances.wfId where wfInstanceId = {wfInstanceId}'.format(wfInstanceId=wfInstanceId)
