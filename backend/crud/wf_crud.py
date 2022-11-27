@@ -1,7 +1,12 @@
+import os
+
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 import datetime
 import itertools
+import matplotlib.pyplot as plt
+import base64
+from matplotlib import pyplot as pyplt
 
 def jsonify_workflow_result(workflow_obj_arr):
     hashmap = []
@@ -115,4 +120,35 @@ def get_incomplete_workflow_instances_for_user(db: Session, userId: int):
 def report_completed_counts(db: Session, businessId: int):
     query = text('select count(wi.wfInstanceId) as completedWFInstances, wfName from (select * from Workflows where businessId='+str(businessId)+') as  w join WorkflowInstances wi using (wfId) where wi.completedDT != \"2001-01-01T00:00:00\" group by wfId')
     result = db.execute(query)
-    return list(result.fetchall())
+    query1 = text('select year(completedDT) as year, count(*) as count from WorkflowInstances where wfId in (select wfId from Workflows where businessId={businessId}) group by year(completedDT) order by year(completedDT);'.format(businessId=businessId))
+    result1 = db.execute(query1)
+    result1 = result1.fetchall()
+    years = [i[0] for i in result1]
+    counts = [i[1] for i in result1]
+    plt.plot(years, counts)
+    plt.xlabel('Years')
+    plt.ylabel('# Completed Workflows')
+    plt.title("Workflow Completion Trend")
+    if os.path.exists("trends.png"):
+        os.remove("trends.png")
+    plt.savefig("trends.png")
+    with open("trends.png", "rb") as img_file:
+        trends = base64.b64encode(img_file.read())
+    # plt.show()
+    plt.close()
+    query2 = text('select floor(avg(datediff(createdDT, completedDT))) as avg_turn_around_days, deptName as department from Workflows JOIN Processes on Workflows.wfId=Processes.wfId JOIN Departments ON Processes.deptId=Departments.deptId JOIN ProcessInstances ON Processes.processId=ProcessInstances.processId where Workflows.businessId={businessId} group by Processes.deptId'.format(businessId=businessId))
+    result2 = db.execute(query2)
+    result2 = result2.fetchall()
+    departments= [i[0] for i in result2]
+    avg_turn_around_days = [i[1] for i in result2]
+    pyplt.bar(avg_turn_around_days, departments)
+    pyplt.xlabel('Department')
+    pyplt.ylabel('Avg. Turn Around Days')
+    pyplt.title("Department velocities")
+    if os.path.exists("velocities.png"):
+        os.remove("velocities.png")
+    pyplt.savefig("velocities.png")
+    # pyplt.show()
+    with open("velocities.png", "rb") as img_file:
+        velocities = base64.b64encode(img_file.read())
+    return {"completed_counts": list(result.fetchall()), "trend_image": trends, "velocities_image": velocities}

@@ -1,4 +1,4 @@
 fastapi
-pymsql
+pymysql
 sqlalchemy
-json
+matplotlib
