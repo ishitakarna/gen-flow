@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
-from ..database.mysql import get_db
-from ..crud import user_crud
+from database.mysql import get_db
+from crud import user_crud
 from sqlalchemy.orm import Session
 from fastapi import Depends
 from pydantic import BaseModel
