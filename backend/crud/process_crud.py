@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from pydantic import BaseModel
+from typing import List
 import datetime
 
 class ProcessParamInstanceObject(BaseModel):
@@ -9,7 +10,7 @@ class ProcessParamInstanceObject(BaseModel):
     paramId: int
 
 class ProcessParamInstanceList(BaseModel):
-    paramList: list[ProcessParamInstanceObject]
+    paramList: List[ProcessParamInstanceObject]
 
 def get_params_for_process_completion(db: Session, processId: int):
     query = text('select * from Parameters where processId = {processId}'.format(processId= processId))
