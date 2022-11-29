@@ -25,6 +25,7 @@ function AddModal(props) {
 
     function handleAddWorkflow() {
         api.createWorkflowInstanceForB(selectedWF).then((d) => {
+            console.log("added")
             console.log(d.data);
         });
         props.onHide();

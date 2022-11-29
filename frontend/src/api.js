@@ -3,7 +3,7 @@ import axios from "axios";
 export default class Api {
     constructor() {
         this.client = null;
-        this.api_url = "https://83aa-76-191-27-122.ngrok.io";
+        this.api_url = "http://20.163.248.78:8080/";
     }
 
     init = () => {

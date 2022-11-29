@@ -16,7 +16,7 @@ function ProcessOwnerView({businessName}) {
             <h1>
                 Process in {processName}
             </h1>
-            <div className = "search-box">
+            {/* <div className = "search-box">
                 <input id="filter"
                 name="filter"
                 type="text"
@@ -24,7 +24,7 @@ function ProcessOwnerView({businessName}) {
                 value={searchFilter}
                 onChange = {e => setSearchFilter(e.target.value)}
                 />
-            </div>
+            </div> */}
             <div className="table-view">
                 <TableView/>
             </div>

@@ -2,10 +2,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Api from "../../../../api";
 import { useState, useEffect } from "react";
+import { ListGroup } from 'react-bootstrap';
 
 function DetailModal({wfInst, onHide}) {
     const api = new Api();
-    const [workflowDetails, setWorkflowDetails] = useState("");
+    const [workflowDetails, setWorkflowDetails] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         getWorkflowDetails();
@@ -18,32 +20,52 @@ function DetailModal({wfInst, onHide}) {
         api.getWorkflowDetails(wfInst.wfInstanceId)
             .then(result => {
                 let processes = result.data;
-                console.log(test);
+                console.log(processes)
                 Object.keys(processes).forEach(function(key){
                     let wf = {}
-                    let len = processes[key].length
-                    let temp = processes[key][len - 1]
-                    console.log(temp)
-                    wfData.push(JSON.stringify(temp))
-                    // let val = Object.values(temp)[0][0]
-                    // wfData.push(JSON.stringify(val))
-                    // //console.log(val)
-                    // wf.wfInstanceId = val.wfInstanceId
-                    // wf.name = val.wfName
-                    // wf.dateC = val.wfcreatedDT
-                    // wf.dateU = val.wfupdatedDT
-                    // wf.curP = val.processId
-                    // wf.dept = val.deptId
-                    // wf.businessId = val.businessId
-                    // wfData.push(wf)
+                    let val = processes[key]
+                    console.log(val)
+                    wf.businessId = val.businessId
+                    wf.wfDescription = val.wfDescription
+                    wf.wfInstanceId = val.wfInstanceId
+                    wf.wfName = val.wfName
+                    wf.createdDT = val.createdDT
+                    wf.updatedDT = val.updatedDT
+                    wf.completedDT = val.completedDT
+                    wf.processes = val.processInstances
+                    setWorkflowDetails(wf)
+                    setLoading(false)
                 })
-                setWorkflowDetails(wfData);
         })
     }
 
+    if (isLoading) {
+        return (
+            <div className="wt-loader">
+                <h1>Loading..</h1>
+                <Modal.Footer>
+                </Modal.Footer>
+            </div>
+        )
+    }
     return (
         <>
-        {workflowDetails}
+        <ListGroup>
+            <ListGroup.Item><b>Workflow Instance: </b>{workflowDetails.wfInstanceId}</ListGroup.Item>
+            <ListGroup.Item><b>Name: </b>{workflowDetails.wfName}</ListGroup.Item>
+            <ListGroup.Item><b>Description: </b>{workflowDetails.wfDescription}</ListGroup.Item>
+            <ListGroup.Item>
+                <b>Processes: </b>
+                {workflowDetails.processes.map((processInst, i , row) => (
+                    <ul key={processInst.processName} className="mb-3">
+                        {i == workflowDetails.processes.length - 1? 
+                            <li style={{color: "red"}}>{processInst.processName}</li> :
+                            <li style={{color: "green"}}>{processInst.processName}</li>
+                        }
+                    </ul>
+            ))}
+            </ListGroup.Item>
+        </ListGroup>
         <Modal.Footer>
           <Button onClick={onHide}>{"Close"}</Button>
         </Modal.Footer>

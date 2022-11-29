@@ -13,19 +13,16 @@ function DeleteModal({setLoading, setWorkflowInstances, deleteData, onHide}) {
                 let workflows = result.data;
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
-                    let len = workflows[key].length
-                    let temp = workflows[key][len - 1]
-                    let val = Object.values(temp)[0][0]
+                    let val = workflows[key]
                     wf.wfInstanceId = val.wfInstanceId
                     wf.name = val.wfName
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
-                    wf.curP = val.processId
-                    wf.dept = val.deptId
+                    wf.curP = val.processInstances[(val.processInstances).length - 1].processName
+                    wf.dept = "Data not available"
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })
-                console.log(wfData);
                 setWorkflowInstances(wfData);
                 setLoading(false);
             })

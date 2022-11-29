@@ -27,11 +27,9 @@ function TableView() {
                 let workflows = result.data;
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
-                    let len = workflows[key].length
-                    let temp = workflows[key][len - 1]
-                    let val = Object.values(temp)[0][0]
+                    let val = workflows[key]
                     wf.wfInstanceId = val.wfInstanceId
-                    wf.dateC = val.createdDT
+                    wf.dateC = val.wfcreatedDT
                     wf.processInstanceId = val.processInstanceId
                     wf.processId = val.processId
                     wfData.push(wf)
