@@ -6,12 +6,13 @@ import { ListGroup } from 'react-bootstrap';
 
 function ReportModal(props) {
     const [report, setReport] = useState([]);
-    const [imageReport, setImageReport] = useState("");
+    const [image1, setImage1] = useState("");
+    const [image2, setImage2] = useState("");
     const api = new Api();
 
     useEffect(() => {
         getReport();
-    }, []);
+    });
 
     function getReport() {
         let wfData = [];
@@ -19,16 +20,17 @@ function ReportModal(props) {
         api.getReport(1)
             .then(result => {
                 let test = result.data.completed_counts;
-                let image = result.data.trend_image;
+                let image1 = result.data.trend_image;
+                let image2 = result.data.velocities_image;
                 test.forEach(function(item, index) {
                     let wf = {}
                     wf.completedWFInstances = item.completedWFInstances;
                     wf.wfName = item.wfName;
                     wfData.push(wf)
                 })
-                console.log(image)
                 setReport(wfData)
-                setImageReport(image)
+                setImage1(image1)
+                setImage2(image2)
         })
     }
 
@@ -42,7 +44,8 @@ function ReportModal(props) {
             </ListGroup>
             ))
         }
-        <img height={200} width={200} src={"data:image/png;base64," +  imageReport} />
+        <img height={200} width={200} src={"data:image/png;base64," +  image1} />
+        <img height={200} width={200} src={"data:image/png;base64," +  image2} />
         <Modal.Footer>
           <Button onClick = {props.onHide} >{"Close"}</Button>
         </Modal.Footer>

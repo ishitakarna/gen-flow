@@ -5,9 +5,10 @@ import Button from 'react-bootstrap/Button';
 import "./WorkflowTable.css"
 import Api from "../../../api";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import AddModal from "../AddModal/AddModal";
 import ModalView from '../../ModalView/ModalView.js'
 
-function WorkflowTable() {
+function WorkflowTable({addModalShow, setAddModalShow}) {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -89,6 +90,15 @@ function WorkflowTable() {
                     setWorkflowInstances = {setWorkflowInstances}
                     deleteData = {selectedRow}
                     onHide={() => {setDeleteModalShow(false);}}/>}
+            />
+            <ModalView
+                show={addModalShow}
+                modalheading = "Add Workflow"
+                onHide={() => setAddModalShow(false)}
+                modaldata = {<AddModal 
+                    setLoading = {setLoading}
+                    setWorkflowInstances = {setWorkflowInstances}
+                    onHide={() => setAddModalShow(false)}/>}
             />
         </div>
     )

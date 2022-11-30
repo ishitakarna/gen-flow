@@ -4,7 +4,6 @@ import "./BusinessOwnerView.css"
 import WorkflowTable from "./WorkflowTable/WorkflowTable";
 import Button from 'react-bootstrap/Button';
 import ModalView from '../ModalView/ModalView.js'
-import AddModal from "./AddModal/AddModal";
 import ReportModal from "./ReportModal/ReportModal";
 import SearchModal from "./SearchModal/SearchModal";
 
@@ -19,9 +18,6 @@ function BusinessOwnerView({bName}) {
         setBusinessName(bName);
     }, []);
 
-    function search(){
-
-    }
     return (
         <div className="bus-container">
             <h1>
@@ -44,14 +40,10 @@ function BusinessOwnerView({bName}) {
                 </div>
             </div>
             <div className = "bus-table">
-                <WorkflowTable/>
+                <WorkflowTable 
+                addModalShow = {addModalShow}
+                setAddModalShow = {setAddModalShow}/>
             </div>
-            <ModalView
-                show={addModalShow}
-                modalheading = "Workflows"
-                onHide={() => setAddModalShow(false)}
-                modaldata = {<AddModal onHide={() => setAddModalShow(false)}/>}
-            />
             <ModalView
                 show={reportModalShow}
                 onHide={() => setReportModalShow(false)}
