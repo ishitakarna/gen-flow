@@ -9,8 +9,12 @@ class ProcessParamInstanceObject(BaseModel):
     processInstanceId: int
     paramId: int
 
-class ProcessParamInstanceList(BaseModel):
-    paramList: List[ProcessParamInstanceObject]
+class CompleteProcess(BaseModel):
+    processInstanceId: int
+    seqNumber: int
+    wfId: int
+    wfInstanceId: int
+    params: List[ProcessParamInstanceObject]
 
 def get_params_for_process_completion(db: Session, processId: int):
     query = text('select * from Parameters where processId = {processId}'.format(processId= processId))
@@ -18,16 +22,22 @@ def get_params_for_process_completion(db: Session, processId: int):
     process_params = list(result.fetchall())
     return process_params
 
-def complete_process(wfId: int,wfInstanceId: int, processInstanceId: int, seqNumber: int, processParamInstances: ProcessParamInstanceList, db: Session):
+def complete_process(completeProcessObj: CompleteProcess, db: Session):
     db.begin()
     try:
         query_insert_completed_processes = text(
             'insert into CompletedProcesses (wfId, wfInstanceId, processInstanceId,seqNumber )'
             ' values ({wfId}, {wfInstanceId}, {processInstanceId}, {seqNumber})'
-            .format(wfId=wfId, wfInstanceId=wfInstanceId, processInstanceId=processInstanceId, seqNumber=seqNumber))
+            .format(wfId=completeProcessObj.wfId, wfInstanceId=completeProcessObj.wfInstanceId, processInstanceId=completeProcessObj.processInstanceId, seqNumber=completeProcessObj.seqNumber))
         db.execute(query_insert_completed_processes)
+
+        # Insert param instances
+        for obj in completeProcessObj.params:
+            insert_param = text('insert into ParamInstances(paramVal, processInstanceId, paramId) values ({param_val}, {process_instance_id}, {param_id})'.format(param_val=obj.paramVal, process_instance_id=obj.paramVal, param_id=obj.paramId))
+            db.execute(insert_param)
         db.commit()
     except:
         db.rollback()
         raise
+
     return {"Updated Process": True}
