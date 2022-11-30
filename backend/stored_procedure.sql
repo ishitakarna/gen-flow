@@ -28,7 +28,7 @@ begin
         wfId as j2WfId, processInstanceId as j2ProcessInstanceId, 
         createdDT as processInstanceCreatedDT, 
         completedDT as processInstanceCompletedDT, 
-        wfInstanceId as j2WfInstanceId from Processes join 
+        wfInstanceId as j2WfInstanceId, deptId from Processes join 
         ProcessInstances on Processes.processId = ProcessInstances.processId;
 
     create or replace view j3J1JoinJ2 as select * from j1WfInsJoinWf 
@@ -44,7 +44,7 @@ begin
         processName, seqNumber, j2ProcessInstanceId as processInstanceId, 
         processInstanceCreatedDT, processInstanceCompletedDT, 
         j4J3JoinParam.paramId as paramId, paramName, paramType, 
-        isOptional, paramVal from j4J3JoinParam left join 
+        isOptional, paramVal, deptId from j4J3JoinParam left join 
         ParamInstances on j4J3JoinParam.paramId = ParamInstances.paramId 
         and j4J3JoinParam.j2ProcessInstanceId = ParamInstances.processInstanceId 
         order by wfcreatedDT desc;
