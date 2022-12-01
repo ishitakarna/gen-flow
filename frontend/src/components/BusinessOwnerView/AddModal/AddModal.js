@@ -11,7 +11,7 @@ function AddModal({setLoading, setWorkflowInstances, onHide}) {
 
     useEffect(() => {
         getAllWorkflows();
-    }, []);
+    });
 
     function getAllWorkflowInstances() {
         const api = new Api();
@@ -22,12 +22,13 @@ function AddModal({setLoading, setWorkflowInstances, onHide}) {
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
                     let val = workflows[key]
+                    console.log(val)
                     wf.wfInstanceId = val.wfInstanceId
                     wf.name = val.wfName
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processInstances[(val.processInstances).length - 1].processName
-                    wf.dept = "Data not available"
+                    wf.dept = val.processInstances[(val.processInstances).length - 1].deptId
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })

@@ -1,7 +1,6 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {Table} from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
 import "./WorkflowTable.css"
 import Api from "../../../api";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -32,7 +31,7 @@ function WorkflowTable({addModalShow, setAddModalShow}) {
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processInstances[(val.processInstances).length - 1].processName
-                    wf.dept = "Data not available"
+                    wf.dept = val.processInstances[(val.processInstances).length - 1].deptId
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })
