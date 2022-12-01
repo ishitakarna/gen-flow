@@ -14,17 +14,12 @@ function DetailModal({wfInst, onHide}) {
     }, []);
 
     function getWorkflowDetails() {
-        let test = [];
-        let wfData = [];
-
         api.getWorkflowDetails(wfInst.wfInstanceId)
             .then(result => {
                 let processes = result.data;
-                console.log(processes)
                 Object.keys(processes).forEach(function(key){
                     let wf = {}
                     let val = processes[key]
-                    console.log(val)
                     wf.businessId = val.businessId
                     wf.wfDescription = val.wfDescription
                     wf.wfInstanceId = val.wfInstanceId

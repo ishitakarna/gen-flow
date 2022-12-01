@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import TableView from "./TableView/TableView";
 import "./ProcessOwnerView.css"
 
-function ProcessOwnerView({businessName}) {
+function ProcessOwnerView({businessName, userId}) {
     const [processName, setProcessName] = useState("");
     const [searchFilter, setSearchFilter] = useState("");
 
@@ -26,7 +26,7 @@ function ProcessOwnerView({businessName}) {
                 />
             </div> */}
             <div className="table-view">
-                <TableView/>
+                <TableView userId = {userId}/>
             </div>
         </div>
     )

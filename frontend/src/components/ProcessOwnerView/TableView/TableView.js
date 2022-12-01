@@ -8,7 +8,7 @@ import DetailModal from "./DetailModal/DetailModal";
 import CompleteModal from "./CompleteModal/CompleteModal";
 import Api from "../../../api";
 
-function TableView() {
+function TableView({userId}) {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [detailModalShow, setDetailModalShow] = useState(false);
@@ -22,31 +22,24 @@ function TableView() {
 
     function getAllWorkflowInstances() {
         const wfData = []
-        api.getWorkflowsForP(2)
+        api.getWorkflowsForP(userId)
             .then(result => {
                 let workflows = result.data;
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
                     let val = workflows[key]
-                    wf.wfInstanceId = val.wfInstanceId
                     wf.dateC = val.wfcreatedDT
-                    wf.processInstanceId = val.processInstanceId
-                    wf.processId = val.processId
+                    wf.curPId = val.processInstances[(val.processInstances).length - 1].processId
+                    wf.processInstanceId = val.processInstances[(val.processInstances).length - 1].processInstanceId
+                    wf.seqNumber = val.processInstances[(val.processInstances).length - 1].seqNumber
+                    wf.wfId = val.wfId
+                    wf.wfInstanceId = val.wfInstanceId
                     wfData.push(wf)
                 })
                 setWorkflowInstances(wfData);
                 setLoading(false);
             })
     };
-
-    function handleComplete() {
-        api.completedProcess(clickedInstance.processInstanceId, clickedInstance.wfInstanceId, clickedInstance.processId).then((d) =>
-        {
-            console.log("posted");
-            console.log(d.data);
-        }
-        );
-    }
 
     if (isLoading) {
         return (
@@ -72,7 +65,7 @@ function TableView() {
                             <td>{wfInst.wfInstanceId}</td>
                             <td>{wfInst.dateC}</td>
                             <td className = "btn_row"><Button className = "tv-btn" variant="primary" onClick={() => setDetailModalShow(true)}>Details</Button>{' '}</td>
-                            <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => handleComplete()}>Complete</Button>{' '}</td>
+                            <td className = "btn_row"><Button className = "tv-btn" variant="outline-success" onClick={() => setCompleteModalShow(true)}>Complete</Button>{' '}</td>
                         </tr>
                 )}
             </tbody>
@@ -86,8 +79,8 @@ function TableView() {
             <ModalView
                 show={completeModalShow}
                 onHide={() => setCompleteModalShow(false)}
-                modalHeading = "Process completion parameters"
-                modalData = {<CompleteModal/>}
+                modalheading = "Set process completion parameters"
+                modaldata = {<CompleteModal wfInst = {clickedInstance} onHide={() => setCompleteModalShow(false)}/>}
             />
         </div>
     )

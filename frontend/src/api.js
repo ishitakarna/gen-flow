@@ -60,12 +60,12 @@ export default class Api {
         return this.init().get(`/workflows/instances/report/${buId}`);
     }
 
-    completedProcess = (pInstId, wfInstId, pId) => {
-        let body = {
-            processInstanceId: pInstId,
-            wfInstanceId: wfInstId,
-            processId: pId
-        }
+    getProcessParams = (pId) => {
+        return this.init().get(`/process/parameters/${pId}`);
+    }
+
+    completedProcess = (body) => {
+        console.log(body)
         return this.init().post(`/process/complete`, body);
     }
 }

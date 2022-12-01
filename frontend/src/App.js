@@ -14,6 +14,7 @@ function App() {
         let savedToken = JSON.parse(sessionStorage.getItem("token"))
         let userType = savedToken.user.userType
         let businessName = savedToken.business.businessName
+        let userId = savedToken.user.userId
         console.log(savedToken)
         if(userType === "business-owner"){
             return (
@@ -24,7 +25,9 @@ function App() {
         } else {
             return (
                 <div className="App">
-                    <ProcessOwnerView businessName={businessName}/>
+                    <ProcessOwnerView 
+                    businessName={businessName}
+                    userId = {userId}/>
                 </div>
             );
         }
