@@ -1,25 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+import Login from "./components/Login/Login";
+import ProcessOwnerView from './components/ProcessOwnerView/ProcessOwnerView';
+import BusinessOwnerView from './components/BusinessOwnerView/BusinessOwnerView';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [token, setToken] = useState();
+
+    if(!token && !sessionStorage.getItem("token")) {
+        return <Login setToken={setToken} />
+    }
+    else {
+        let savedToken = JSON.parse(sessionStorage.getItem("token"))
+        let userType = savedToken.user.userType
+        let businessName = savedToken.business.businessName
+        console.log(savedToken)
+        if(userType === "business-owner"){
+            return (
+                <div className="App">
+                    <BusinessOwnerView bName={businessName}/>
+                </div>
+            );
+        } else {
+            return (
+                <div className="App">
+                    <ProcessOwnerView businessName={businessName}/>
+                </div>
+            );
+        }
+    }
 }
 
 export default App;

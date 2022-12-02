@@ -1,0 +1,20 @@
+.tv-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.loader {
+    text-align: center;
+    padding: 10px;
+}
+
+.tv-btn {
+    font-size: 12px;
+}
+
+.tv-btn_row {
+    text-align: center;
+}
