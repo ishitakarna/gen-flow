@@ -4,7 +4,7 @@ import Api from "../../../../api";
 import { useState, useEffect } from "react";
 import { Form } from 'react-bootstrap';
 
-function CompleteModal({wfInst, onHide}) {
+function CompleteModal({wfInst, onHide, userId, setWorkflowInstances}) {
     const api = new Api();
     const [processParams, setProcessParams] = useState([]);
     const [isLoading, setLoading] = useState(true);
@@ -13,6 +13,27 @@ function CompleteModal({wfInst, onHide}) {
     useEffect(() => {
         getProcessCompletionParams();
     }, []);
+
+    function getAllWorkflowInstances() {
+        const wfData = []
+        api.getWorkflowsForP(userId)
+            .then(result => {
+                let workflows = result.data;
+                Object.keys(workflows).forEach(function(key){
+                    let wf = {}
+                    let val = workflows[key]
+                    wf.dateC = val.wfcreatedDT
+                    wf.curPId = val.processInstances[(val.processInstances).length - 1].processId
+                    wf.processInstanceId = val.processInstances[(val.processInstances).length - 1].processInstanceId
+                    wf.seqNumber = val.processInstances[(val.processInstances).length - 1].seqNumber
+                    wf.wfId = val.wfId
+                    wf.wfInstanceId = val.wfInstanceId
+                    wfData.push(wf)
+                })
+                setWorkflowInstances(wfData);
+            })
+    };
+
 
     function handleComplete() {
         let data = {}
@@ -32,8 +53,7 @@ function CompleteModal({wfInst, onHide}) {
         })
 
         api.completedProcess(data).then((d) => {
-            console.log(d.data)
-            //getAllWorkflowInstances();
+            getAllWorkflowInstances();
         })
         onHide()
     }

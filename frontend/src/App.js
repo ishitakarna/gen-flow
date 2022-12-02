@@ -15,6 +15,7 @@ function App() {
         let userType = savedToken.user.userType
         let businessName = savedToken.business.businessName
         let userId = savedToken.user.userId
+        let userName = savedToken.user.fName + " " + savedToken.user.lName
         console.log(savedToken)
         if(userType === "business-owner"){
             return (
@@ -27,7 +28,8 @@ function App() {
                 <div className="App">
                     <ProcessOwnerView 
                     businessName={businessName}
-                    userId = {userId}/>
+                    userId = {userId}
+                    userName = {userName}/>
                 </div>
             );
         }

@@ -74,13 +74,19 @@ function TableView({userId}) {
                 show={detailModalShow}
                 onHide={() => setDetailModalShow(false)}
                 modalheading = "Workflow Instance Details"
-                modaldata = {<DetailModal wfInst = {clickedInstance} onHide={() => setDetailModalShow(false)}/>}
+                modaldata = {<DetailModal 
+                    wfInst = {clickedInstance} 
+                    onHide={() => setDetailModalShow(false)}/>}
             />
             <ModalView
                 show={completeModalShow}
                 onHide={() => setCompleteModalShow(false)}
                 modalheading = "Set process completion parameters"
-                modaldata = {<CompleteModal wfInst = {clickedInstance} onHide={() => setCompleteModalShow(false)}/>}
+                modaldata = {<CompleteModal 
+                    wfInst = {clickedInstance} 
+                    userId = {userId}
+                    setWorkflowInstances = {setWorkflowInstances}
+                    onHide={() => setCompleteModalShow(false)}/>}
             />
         </div>
     )

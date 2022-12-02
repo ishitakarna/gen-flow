@@ -3,9 +3,16 @@ import { useState, useEffect } from "react";
 import TableView from "./TableView/TableView";
 import "./ProcessOwnerView.css"
 
-function ProcessOwnerView({businessName, userId}) {
+function ProcessOwnerView({businessName, userId, userName}) {
     const [processName, setProcessName] = useState("");
-    const [searchFilter, setSearchFilter] = useState("");
+    const deptMap = {
+        1: "Kitchen",
+        2: "Server",
+        3: "Delivery Agent",
+        4: "Janitor",
+        5: "Cashier",
+        6: "Manager"
+    }
 
     useEffect(() => {
         setProcessName(businessName)
@@ -13,9 +20,11 @@ function ProcessOwnerView({businessName, userId}) {
 
     return (
         <div className="container">
-            <h1>
-                Process in {processName}
-            </h1>
+            <h1>{processName}</h1>
+            <h2 style={{color:"green"}}>
+                Department: {deptMap[userId]}
+            </h2>
+            <h3>Hi! <span style={{color:"blue", textTransform:"capitalize"}}>{userName}</span></h3>
             {/* <div className = "search-box">
                 <input id="filter"
                 name="filter"

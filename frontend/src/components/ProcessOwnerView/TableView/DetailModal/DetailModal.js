@@ -28,6 +28,7 @@ function DetailModal({wfInst, onHide}) {
                     wf.updatedDT = val.updatedDT
                     wf.completedDT = val.completedDT
                     wf.processes = val.processInstances
+                    console.log(val)
                     setWorkflowDetails(wf)
                     setLoading(false)
                 })
@@ -54,8 +55,17 @@ function DetailModal({wfInst, onHide}) {
                 {workflowDetails.processes.map((processInst, i , row) => (
                     <ul key={processInst.processName} className="mb-3">
                         {i == workflowDetails.processes.length - 1? 
-                            <li style={{color: "red"}}>{processInst.processName}</li> :
-                            <li style={{color: "green"}}>{processInst.processName}</li>
+                            <li style={{color: "red"}}>
+                                {processInst.processName}
+                            </li> :
+                            <li style={{color: "green"}}>
+                                {processInst.processName}
+                                {processInst.paramInstances.map((param) => (
+                                    <ul>
+                                        <li>{param.paramName}: <b>{param.paramVal}</b></li>
+                                    </ul>
+                                ))}
+                            </li>
                         }
                     </ul>
             ))}

@@ -55,8 +55,17 @@ function SearchModal(props) {
                 {workflow.processes.map((processInst, i , row) => (
                     <ul key={processInst.processName} className="mb-3">
                         {i == workflow.processes.length - 1? 
-                            <li style={{color: "red"}}>{processInst.processName}</li> :
-                            <li style={{color: "green"}}>{processInst.processName}</li>
+                            <li style={{color: "red"}}>
+                                {processInst.processName}
+                            </li> :
+                            <li style={{color: "green"}}>
+                                {processInst.processName}
+                                {processInst.paramInstances.map((param) => (
+                                    <ul>
+                                        <li>{param.paramName}: <b>{param.paramVal}</b></li>
+                                    </ul>
+                                ))}
+                            </li>
                         }
                     </ul>
             ))}

@@ -29,7 +29,7 @@ function ReportModal(props) {
                     wfData.push(wf)
                 })
                 setReport(wfData)
-                setImage1(image1)
+                //setImage1(image1)
                 setImage2(image2)
         })
     }
@@ -44,8 +44,8 @@ function ReportModal(props) {
             </ListGroup>
             ))
         }
-        <img height={200} width={200} src={"data:image/png;base64," +  image1} />
-        <img height={200} width={200} src={"data:image/png;base64," +  image2} />
+        {/* <img height={200} width={200} src={"data:image/png;base64," +  image1} /> */}
+        <img height={400} width={400} src={"data:image/png;base64," +  image2} />
         <Modal.Footer>
           <Button onClick = {props.onHide} >{"Close"}</Button>
         </Modal.Footer>
