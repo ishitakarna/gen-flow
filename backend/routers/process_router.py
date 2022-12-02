@@ -29,7 +29,6 @@ async def get_params_for_process_completion(processId: int, db: Session = Depend
 
 @router.post("/complete")
 async def complete_process_instance(completeProcessObj: CompleteProcess , db: Session = Depends(get_db)):
-    print('hehe')
     # Input - parameters required for the process type
     # Check if this is the last process - if yes then complete the workflow instance as well
     # If not, then complete and update the process instance, update the workflow instance and start the next process

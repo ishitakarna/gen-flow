@@ -33,7 +33,7 @@ def complete_process(completeProcessObj: CompleteProcess, db: Session):
 
         # Insert param instances
         for obj in completeProcessObj.params:
-            insert_param = text('insert into ParamInstances(paramVal, processInstanceId, paramId) values ({param_val}, {process_instance_id}, {param_id})'.format(param_val=obj.paramVal, process_instance_id=obj.paramVal, param_id=obj.paramId))
+            insert_param = text('insert into ParamInstances(paramVal, processInstanceId, paramId) values (\"{param_val}\", {process_instance_id}, {param_id})'.format(param_val=obj.paramVal, process_instance_id=obj.processInstanceId, param_id=obj.paramId))
             db.execute(insert_param)
         db.commit()
     except:
