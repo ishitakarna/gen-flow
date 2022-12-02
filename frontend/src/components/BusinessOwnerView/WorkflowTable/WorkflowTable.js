@@ -1,17 +1,25 @@
 import React from "react";
 import {useState, useEffect} from "react";
 import {Table} from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
 import "./WorkflowTable.css"
 import Api from "../../../api";
 import DeleteModal from "../DeleteModal/DeleteModal";
+import AddModal from "../AddModal/AddModal";
 import ModalView from '../../ModalView/ModalView.js'
 
-function WorkflowTable() {
+function WorkflowTable({addModalShow, setAddModalShow}) {
     const [workflowInstances, setWorkflowInstances] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [deleteModalShow, setDeleteModalShow] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
+    const deptMap = {
+        1: "Kitchen",
+        2: "Server",
+        3: "Delivery Agent",
+        4: "Janitor",
+        5: "Cashier",
+        6: "Manager"
+    }
 
     useEffect(() => {
         getAllWorkflowInstances();
@@ -25,19 +33,16 @@ function WorkflowTable() {
                 let workflows = result.data;
                 Object.keys(workflows).forEach(function(key){
                     let wf = {}
-                    let len = workflows[key].length
-                    let temp = workflows[key][len - 1]
-                    let val = Object.values(temp)[0][0]
+                    let val = workflows[key]
                     wf.wfInstanceId = val.wfInstanceId
                     wf.name = val.wfName
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
-                    wf.curP = val.processName
-                    wf.dept = val.deptId
+                    wf.curP = val.processInstances[(val.processInstances).length - 1].processName
+                    wf.dept = deptMap[val.processInstances[(val.processInstances).length - 1].deptId]
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })
-                console.log(wfData);
                 setWorkflowInstances(wfData);
                 setLoading(false);
             })
@@ -92,6 +97,15 @@ function WorkflowTable() {
                     setWorkflowInstances = {setWorkflowInstances}
                     deleteData = {selectedRow}
                     onHide={() => {setDeleteModalShow(false);}}/>}
+            />
+            <ModalView
+                show={addModalShow}
+                modalheading = "Add Workflow"
+                onHide={() => setAddModalShow(false)}
+                modaldata = {<AddModal 
+                    setLoading = {setLoading}
+                    setWorkflowInstances = {setWorkflowInstances}
+                    onHide={() => setAddModalShow(false)}/>}
             />
         </div>
     )

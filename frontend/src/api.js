@@ -3,7 +3,7 @@ import axios from "axios";
 export default class Api {
     constructor() {
         this.client = null;
-        this.api_url = "https://83aa-76-191-27-122.ngrok.io";
+        this.api_url = "http://20.163.248.78:8080/";
     }
 
     init = () => {
@@ -60,12 +60,12 @@ export default class Api {
         return this.init().get(`/workflows/instances/report/${buId}`);
     }
 
-    completedProcess = (pInstId, wfInstId, pId) => {
-        let body = {
-            processInstanceId: pInstId,
-            wfInstanceId: wfInstId,
-            processId: pId
-        }
+    getProcessParams = (pId) => {
+        return this.init().get(`/process/parameters/${pId}`);
+    }
+
+    completedProcess = (body) => {
+        console.log(body)
         return this.init().post(`/process/complete`, body);
     }
 }
