@@ -8,6 +8,14 @@ function AddModal({setLoading, setWorkflowInstances, onHide}) {
     const [workflows, setWorkflows] = useState([]);
     const [selectedWF, setSelectedWF] = useState({});
     const api = new Api();
+    const deptMap = {
+        1: "Kitchen",
+        2: "Server",
+        3: "Delivery Agent",
+        4: "Janitor",
+        5: "Cashier",
+        6: "Manager"
+    }
 
     useEffect(() => {
         getAllWorkflows();
@@ -28,7 +36,7 @@ function AddModal({setLoading, setWorkflowInstances, onHide}) {
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processInstances[(val.processInstances).length - 1].processName
-                    wf.dept = val.processInstances[(val.processInstances).length - 1].deptId
+                    wf.dept = deptMap[val.processInstances[(val.processInstances).length - 1].deptId]
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })

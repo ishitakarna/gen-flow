@@ -4,7 +4,14 @@ import Api from "../../../api";
 
 function DeleteModal({setLoading, setWorkflowInstances, deleteData, onHide}) {
     const api = new Api();
-    console.log(deleteData)
+    const deptMap = {
+        1: "Kitchen",
+        2: "Server",
+        3: "Delivery Agent",
+        4: "Janitor",
+        5: "Cashier",
+        6: "Manager"
+    }
 
     function getAllWorkflowInstances() {
         const api = new Api();
@@ -20,7 +27,7 @@ function DeleteModal({setLoading, setWorkflowInstances, deleteData, onHide}) {
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processInstances[(val.processInstances).length - 1].processName
-                    wf.dept = val.processInstances[(val.processInstances).length - 1].deptId
+                    wf.dept = deptMap[val.processInstances[(val.processInstances).length - 1].deptId]
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })

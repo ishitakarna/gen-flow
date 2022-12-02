@@ -12,6 +12,14 @@ function WorkflowTable({addModalShow, setAddModalShow}) {
     const [isLoading, setLoading] = useState(true);
     const [deleteModalShow, setDeleteModalShow] = useState(false);
     const [selectedRow, setSelectedRow] = useState({});
+    const deptMap = {
+        1: "Kitchen",
+        2: "Server",
+        3: "Delivery Agent",
+        4: "Janitor",
+        5: "Cashier",
+        6: "Manager"
+    }
 
     useEffect(() => {
         getAllWorkflowInstances();
@@ -31,7 +39,7 @@ function WorkflowTable({addModalShow, setAddModalShow}) {
                     wf.dateC = val.wfcreatedDT
                     wf.dateU = val.wfupdatedDT
                     wf.curP = val.processInstances[(val.processInstances).length - 1].processName
-                    wf.dept = val.processInstances[(val.processInstances).length - 1].deptId
+                    wf.dept = deptMap[val.processInstances[(val.processInstances).length - 1].deptId]
                     wf.businessId = val.businessId
                     wfData.push(wf)
                 })
